@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Shopping Web Extension",
+    "version": "0.0.1",
+    "description": "The Extension for the Disability Impact Project",
+    "author": "TeamINK",
+    "icons": {
+        "16": "icon.webp",
+        "48": "icon.webp",
+        "128": "icon.webp"
+    },
+    "action": 
+    {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.webp",
+            "48": "icon.webp",
+            "128": "icon.webp"
+        },
+        "default_title": "Shopping Web Extension"
+    },
+    "options_page": "options.html"
+}

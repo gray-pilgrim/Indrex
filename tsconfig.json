@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        // JSX specifies the syntax to be used in React components
+        "jsx": "react",
+        
+        // Specify the module code generation
+        "module": "es6",
+        
+        // Specify the ECMAScript target version
+        "target": "es6",
+        
+        // Specify the module resolution strategy
+        "moduleResolution": "node",
+        
+        // Allow default imports from CommonJS modules as if they were ES6 modules
+        "esModuleInterop": true,
+    },
+    
+    // Specify the files to include in the compilation process
+    "include": ["src/**/*.ts", "src/**/*.tsx"],
+    
+    // Specify the files and directories to exclude from the compilation process
+    "exclude": ["node_modules"],
+}
