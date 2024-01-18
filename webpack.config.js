@@ -9,7 +9,10 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
         popup: path.resolve("./src/popup/popup.tsx"),
-        options: path.resolve("./src/options/options.tsx")
+        options: path.resolve("./src/options/options.tsx"),
+        background: path.resolve("./src/background/background.ts"),
+        contentScript: path.resolve("./src/contentScript/contentScript.ts"),
+        newTab: path.resolve("./src/tabs/index.tsx")
     },
     module: {
         rules:[
@@ -17,6 +20,10 @@ module.exports = {
                 use: "ts-loader",
                 exclude: /node_modules/,
                 test: /\.tsx$/
+            },
+            {
+              test: /\.(png|jpe?g|gif|svg)$/i,
+              type: 'asset/resource', // This will handle image files
             },
             {
                 use: ["style-loader", "css-loader",{
@@ -36,7 +43,6 @@ module.exports = {
             {
               test: /\.(png|svg|jpg|jpeg|gif|tff|woff|woff2)$/i,
               type: 'asset/resource',
-              use: 'assets/resource'
             }
         ]
     },
@@ -54,7 +60,8 @@ module.exports = {
         }),
         ...getHtmlPlugins([
             'popup',
-            'options'
+            'options',
+            'newTab'
         ])
     ],
     resolve: {
@@ -62,6 +69,7 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
+        assetModuleFilename: 'images/[hash][ext][query]', // Custom directory for images
     },
     optimization: {
         splitChunks: {

@@ -9,21 +9,114 @@
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var _assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/Banner.png */ "./src/assets/Banner.png");
 
 
 
-const test = (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
-    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500" }, "The Great Extension "),
-    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: "Banner.png", alt: "Picture depicting different disabilities" })));
+// Icons for recording options
+
+
+
+const Popup = () => {
+    // States for disability and recording options
+    const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+    const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('screen-cam');
+    const [recordingIcon, setRecordingIcon] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+    // States for the review form
+    const [name, setName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+    const [review, setReview] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+    const [reviews, setReviews] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]); // State to hold the list of reviews
+    // Load reviews from chrome.storage when the component mounts
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+        // Fetch reviews from storage
+        chrome.storage.sync.get(['reviews']).then((result) => {
+            if (result.reviews) {
+                setReviews(result.reviews);
+            }
+        });
+    }, []);
+    // Handlers for disability and recording options
+    const handleDisabilitySelectionChange = (event) => {
+        setDisabilitySelection(event.target.value);
+    };
+    const handleRecordingSelectionChange = (event) => {
+        setRecordingSelection(event.target.value);
+        switch (event.target.value) {
+            case 'screen-cam':
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                break;
+            case 'screen-only':
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                break;
+            case 'cam-only':
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                break;
+            default:
+                setRecordingIcon(null); // or a default icon
+        }
+    };
+    const startRecording = () => {
+        console.log('Recording option selected:', recordingSelection);
+        // Logic to start recording...
+    };
+    // Function to handle review form submission
+    const submitReview = (event) => {
+        event.preventDefault();
+        const newReview = { name, review };
+        const updatedReviews = [...reviews, newReview];
+        // Save the updated reviews array to chrome.storage
+        chrome.storage.sync.set({ reviews: updatedReviews }).then(() => {
+            console.log('Review submitted:', newReview);
+            setReviews(updatedReviews); // Update state with new review
+        });
+        // Reset form fields
+        setName('');
+        setReview('');
+    };
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "p-4" },
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500 mb-4" }, "The Great Extension"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4" },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: disabilitySelection, onChange: handleDisabilitySelectionChange, className: "border border-gray-300 rounded p-2" },
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "" }, "Select disability type"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Blindness" }, "Blindness"))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4 flex items-center" },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: recordingSelection, onChange: handleRecordingSelectionChange, className: "border border-gray-300 rounded p-2" },
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-cam" }, "Screen and Camera"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-only" }, "Screen Only"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Cam Only")),
+            recordingIcon && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: recordingIcon, alt: "Recording option icon", className: "ml-2" })),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Start recording"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "review-section h-40 overflow-auto border border-gray-300 p-2 my-4" }, reviews.map((review, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: "review mb-2" },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", { className: "font-bold" }, review.name),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, review.review))))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", { onSubmit: submitReview, className: "mb-4" },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), placeholder: "Your name", className: "border border-gray-300 rounded p-2 w-full mb-2" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { value: review, onChange: (e) => setReview(e.target.value), placeholder: "Your review", className: "border border-gray-300 rounded p-2 w-full mb-2" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { type: "submit", className: "bg-blue-500 text-white px-4 py-2 rounded" }, "Submit Review"))));
+};
 const container = document.createElement('div');
 document.body.appendChild(container);
 const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
-root.render(test);
+root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Popup, null));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Popup);
 
+
+/***/ }),
+
+/***/ "./src/assets/Banner.png":
+/*!*******************************!*\
+  !*** ./src/assets/Banner.png ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__.p + "images/f30cd11ff548b19631ba.png";
 
 /***/ })
 
@@ -116,6 +209,18 @@ root.render(test);
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -139,6 +244,29 @@ root.render(test);
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src;
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) {
+/******/ 					var i = scripts.length - 1;
+/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
@@ -204,7 +332,7 @@ root.render(test);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-b53f7e","src_assets_tailwind_css"], () => (__webpack_require__("./src/popup/popup.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js","src_assets_tailwind_css"], () => (__webpack_require__("./src/popup/popup.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

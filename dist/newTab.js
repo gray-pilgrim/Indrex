@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/options/options.tsx":
-/*!*********************************!*\
-  !*** ./src/options/options.tsx ***!
-  \*********************************/
+/***/ "./src/tabs/components/About.tsx":
+/*!***************************************!*\
+  !*** ./src/tabs/components/About.tsx ***!
+  \***************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -14,51 +14,99 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
 
-
-
-const HelpPage = () => {
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "flex" },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("aside", { className: "w-64 border-r border-gray-200 h-screen overflow-y-auto" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "p-4 sticky top-0" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-xl font-semibold mb-4" }, "Documentation"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("nav", null,
-                    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null,
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { className: "mb-2" },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#overview", className: "text-blue-500 hover:underline" }, "Overview")),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { className: "mb-2" },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#getting-started", className: "text-blue-500 hover:underline" }, "Get Started")),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { className: "mb-2" },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#migration-steps", className: "text-blue-500 hover:underline" }, "Migration Steps")),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { className: "mb-2" },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#examples", className: "text-blue-500 hover:underline" }, "Examples")),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { className: "mb-2" },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#faq", className: "text-blue-500 hover:underline" }, "FAQ")))))),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("main", { className: "flex-grow p-4" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500 mb-4" }, "Migrate to Manifest V3"),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { id: "overview" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-3xl font-bold mb-2" }, "Overview"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { className: "mt-1 mb-4" }, "Learn about the benefits of migrating to Manifest V3 and the key differences from Manifest V2.")),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { id: "getting-started" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-3xl font-bold mb-2" }, "Get Started"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { className: "mt-1 mb-4" }, "Steps to set up your development environment for Manifest V3.")),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { id: "migration-steps" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-3xl font-bold mb-2" }, "Migration Steps"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { className: "mt-1 mb-4" }, "Follow these steps to transition your extension from Manifest V2 to V3.")),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { id: "examples" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-3xl font-bold mb-2" }, "Examples"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { className: "mt-1 mb-4" }, "Explore code examples and best practices for a smooth migration.")),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { id: "faq" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", { className: "text-3xl font-bold mb-2" }, "FAQ"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", { className: "mt-1" }, "Frequently asked questions about Manifest V3.")))));
+const About = () => {
+    // Component code
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "About Component");
 };
-const container = document.createElement('div');
-document.body.appendChild(container);
-const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(container);
-root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HelpPage, null));
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HelpPage);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (About); // Check this line
+
+
+/***/ }),
+
+/***/ "./src/tabs/components/Home.tsx":
+/*!**************************************!*\
+  !*** ./src/tabs/components/Home.tsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+const Home = () => {
+    // Component code
+    return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Home Component");
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Home); // Check this line
+
+
+/***/ }),
+
+/***/ "./src/tabs/index.tsx":
+/*!****************************!*\
+  !*** ./src/tabs/index.tsx ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var _tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tabs */ "./src/tabs/tabs.tsx");
+
+
+
+
+function init() {
+    const appContainer = document.createElement("div");
+    document.body.appendChild(appContainer);
+    if (!appContainer) {
+        throw new Error("Failed to find app container");
+    }
+    const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(appContainer);
+    root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.HashRouter, null,
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_tabs__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
+}
+
+
+/***/ }),
+
+/***/ "./src/tabs/tabs.tsx":
+/*!***************************!*\
+  !*** ./src/tabs/tabs.tsx ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _tabs_components_About__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tabs/components/About */ "./src/tabs/components/About.tsx");
+/* harmony import */ var _tabs_components_Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tabs/components/Home */ "./src/tabs/components/Home.tsx");
+
+
+
+
+function Tabs() {
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null,
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#/" }, " Home ")),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null,
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", { href: "#/about" }, " About "))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Routes, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, { path: "/", element: react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_tabs_components_Home__WEBPACK_IMPORTED_MODULE_2__["default"], null) }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Route, { index: true, element: react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_tabs_components_About__WEBPACK_IMPORTED_MODULE_1__["default"], null) }))));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tabs);
 
 
 /***/ })
@@ -140,6 +188,36 @@ root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HelpPage,
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/create fake namespace object */
+/******/ 	(() => {
+/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
+/******/ 		var leafPrototypes;
+/******/ 		// create a fake namespace object
+/******/ 		// mode & 1: value is a module id, require it
+/******/ 		// mode & 2: merge all properties of value into the ns
+/******/ 		// mode & 4: return value when already ns object
+/******/ 		// mode & 16: return value when it's Promise-like
+/******/ 		// mode & 8|1: behave like require
+/******/ 		__webpack_require__.t = function(value, mode) {
+/******/ 			if(mode & 1) value = this(value);
+/******/ 			if(mode & 8) return value;
+/******/ 			if(typeof value === 'object' && value) {
+/******/ 				if((mode & 4) && value.__esModule) return value;
+/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
+/******/ 			}
+/******/ 			var ns = Object.create(null);
+/******/ 			__webpack_require__.r(ns);
+/******/ 			var def = {};
+/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
+/******/ 			for(var current = mode & 2 && value; typeof current == 'object' && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
+/******/ 			}
+/******/ 			def['default'] = () => (value);
+/******/ 			__webpack_require__.d(ns, def);
+/******/ 			return ns;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -185,7 +263,7 @@ root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HelpPage,
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"options": 0
+/******/ 			"newTab": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -230,19 +308,14 @@ root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HelpPage,
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/nonce */
-/******/ 	(() => {
-/******/ 		__webpack_require__.nc = undefined;
-/******/ 	})();
-/******/ 	
 /************************************************************************/
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js","src_assets_tailwind_css"], () => (__webpack_require__("./src/options/options.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js","vendors-node_modules_react-router-dom_dist_index_js"], () => (__webpack_require__("./src/tabs/index.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=options.js.map
+//# sourceMappingURL=newTab.js.map
