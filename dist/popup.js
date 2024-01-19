@@ -25,6 +25,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const Popup = () => {
+    const [currentUrl, setCurrentUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     // States for disability and recording options
     const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('screen-cam');
@@ -33,13 +34,44 @@ const Popup = () => {
     const [name, setName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [review, setReview] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [reviews, setReviews] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]); // State to hold the list of reviews
+    const [htmlContent, setHtmlContent] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     // Load reviews from chrome.storage when the component mounts
     (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+        // Listen for messages from the content script
         // Fetch reviews from storage
         chrome.storage.sync.get(['reviews']).then((result) => {
             if (result.reviews) {
                 setReviews(result.reviews);
             }
+        });
+        chrome.runtime.onMessage.addListener((message) => {
+            if (message.html) {
+                setHtmlContent(message.html);
+            }
+        });
+        chrome.runtime.onMessage.addListener((message) => {
+            if (message.html) {
+                const htmlContent = message.html;
+                document.getElementById('htmlContent').textContent = htmlContent;
+                // Send the HTML content to the Python server
+                fetch('http://localhost:5000/receive_html', {
+                    method: 'POST',
+                    body: htmlContent,
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(data => console.log('Server Response:', data))
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+        // Trigger the content script to send HTML when the popup is opened
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id },
+                files: ['contentScript.js']
+            });
         });
     }, []);
     // Handlers for disability and recording options
@@ -93,6 +125,10 @@ const Popup = () => {
                 react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Cam Only")),
             recordingIcon && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: recordingIcon, alt: "Recording option icon", className: "ml-2" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Start recording"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("body", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Extracted HTML:"),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { id: "htmlContent" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("script", { src: "popup.js" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "review-section h-40 overflow-auto border border-gray-300 p-2 my-4" }, reviews.map((review, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: "review mb-2" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", { className: "font-bold" }, review.name),
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, review.review))))),

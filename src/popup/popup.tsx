@@ -8,6 +8,7 @@ import screenOnlyIcon from '../assets/Banner.png';
 import camOnlyIcon from '../assets/Banner.png';
 
 const Popup = () => {
+  const [currentUrl, setCurrentUrl] = useState('');
   // States for disability and recording options
   const [disabilitySelection, setDisabilitySelection] = useState('');
   const [recordingSelection, setRecordingSelection] = useState('screen-cam');
@@ -18,14 +19,52 @@ const Popup = () => {
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]); // State to hold the list of reviews
 
+  const [htmlContent, setHtmlContent] = useState('');
+
+
   // Load reviews from chrome.storage when the component mounts
   useEffect(() => {
+    // Listen for messages from the content script
+
     // Fetch reviews from storage
     chrome.storage.sync.get(['reviews']).then((result) => {
       if (result.reviews) {
         setReviews(result.reviews);
       }
     });
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.html) {
+        setHtmlContent(message.html);
+      }
+    });
+    
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message.html) {
+        const htmlContent = message.html;
+        document.getElementById('htmlContent').textContent = htmlContent;
+    
+        // Send the HTML content to the Python server
+        fetch('http://localhost:5000/receive_html', {
+          method: 'POST',
+          body: htmlContent,
+          headers: {
+            'Content-Type': 'text/plain'
+          }
+        })
+        .then(response => response.text())
+        .then(data => console.log('Server Response:', data))
+        .catch(error => console.error('Error:', error));
+      }
+    });
+    
+    // Trigger the content script to send HTML when the popup is opened
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.scripting.executeScript({
+        target: { tabId: tabs[0].id },
+        files: ['contentScript.js']
+      });
+    });
+    
   }, []);
 
   // Handlers for disability and recording options
@@ -106,6 +145,13 @@ const Popup = () => {
     >
       Start recording
     </button>
+
+
+    <body>
+    <h1>Extracted HTML:</h1>
+    <textarea id="htmlContent"></textarea>
+    <script src="popup.js"></script>
+    </body>
 
     {/* Review section from code2.tsx */}
       <div className="review-section h-40 overflow-auto border border-gray-300 p-2 my-4">

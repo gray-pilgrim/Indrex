@@ -22,15 +22,16 @@
     "permissions": [
       "tabs",
       "bookmarks",
-      "storage"
+      "storage",
+      "activeTab",
+      "scripting"
     ],
     "background": {
         "service_worker": "background.js"
     },
     "content_scripts": [
       {
-        "matches": ["https://*.google.com/*"],
-        "match_origin_as_fallback": true,
+        "matches": ["https://*/*"],
         "js": ["contentScript.js"]
       }
     ],

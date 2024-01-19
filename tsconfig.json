@@ -2,6 +2,9 @@
     "compilerOptions": {
         // JSX specifies the syntax to be used in React components
         "jsx": "react",
+
+        
+        "lib": ["dom", "es6"],
         
         // Specify the module code generation
         "module": "es6",
