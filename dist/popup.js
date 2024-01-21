@@ -53,7 +53,6 @@ const Popup = () => {
             if (message.html) {
                 const htmlContent = message.html;
                 document.getElementById('htmlContent').textContent = htmlContent;
-                // Send the HTML content to the Python server
                 fetch('http://localhost:5000/receive_html', {
                     method: 'POST',
                     body: htmlContent,
@@ -62,7 +61,11 @@ const Popup = () => {
                     }
                 })
                     .then(response => response.text())
-                    .then(data => console.log('Server Response:', data))
+                    .then(data => {
+                    console.log('Server Response:', data);
+                    // Update the popup with the server response
+                    document.getElementById('serverResponse').textContent = data;
+                })
                     .catch(error => console.error('Error:', error));
             }
         });
@@ -125,9 +128,13 @@ const Popup = () => {
                 react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Cam Only")),
             recordingIcon && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: recordingIcon, alt: "Recording option icon", className: "ml-2" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Start recording"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("head", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("title", null, "Extracted HTML")),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("body", null,
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Extracted HTML:"),
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { id: "htmlContent" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Server Response:"),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { id: "serverResponse" }),
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("script", { src: "popup.js" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "review-section h-40 overflow-auto border border-gray-300 p-2 my-4" }, reviews.map((review, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: "review mb-2" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", { className: "font-bold" }, review.name),

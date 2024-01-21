@@ -43,7 +43,6 @@ const Popup = () => {
         const htmlContent = message.html;
         document.getElementById('htmlContent').textContent = htmlContent;
     
-        // Send the HTML content to the Python server
         fetch('http://localhost:5000/receive_html', {
           method: 'POST',
           body: htmlContent,
@@ -52,10 +51,15 @@ const Popup = () => {
           }
         })
         .then(response => response.text())
-        .then(data => console.log('Server Response:', data))
+        .then(data => {
+          console.log('Server Response:', data);
+          // Update the popup with the server response
+          document.getElementById('serverResponse').textContent = data;
+        })
         .catch(error => console.error('Error:', error));
       }
     });
+    
     
     // Trigger the content script to send HTML when the popup is opened
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -147,11 +151,16 @@ const Popup = () => {
     </button>
 
 
-    <body>
+    <head>
+    <title>Extracted HTML</title>
+</head> 
+<body>
     <h1>Extracted HTML:</h1>
     <textarea id="htmlContent"></textarea>
+    <h2>Server Response:</h2>
+    <div id="serverResponse"></div>
     <script src="popup.js"></script>
-    </body>
+</body>
 
     {/* Review section from code2.tsx */}
       <div className="review-section h-40 overflow-auto border border-gray-300 p-2 my-4">
