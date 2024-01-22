@@ -95,7 +95,11 @@ const Popup = () => {
 
   const startRecording = () => {
     console.log('Recording option selected:', recordingSelection);
-    // Logic to start recording...
+  
+    // Send a message to the active tab to fetch HTML content
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML" });
+    });
   };
 
   // Function to handle review form submission
@@ -128,6 +132,11 @@ const Popup = () => {
       >
         <option value="">Select disability type</option>
         <option value="Blindness">Blindness</option>
+        <option value="Deafness">Deafness</option>
+        <option value="Non-Verbal">Non-Verbal</option>
+        <option value="Low-Vision">Low-vision</option>
+        <option value="Hard of Hearing">Hard of Hearing</option>
+        <option value="Paraplegic">Paraplegia</option>
         {/* ... other disability options ... */}
       </select>
     </div>
@@ -137,9 +146,9 @@ const Popup = () => {
         onChange={handleRecordingSelectionChange}
         className="border border-gray-300 rounded p-2"
       >
-        <option value="screen-cam">Screen and Camera</option>
-        <option value="screen-only">Screen Only</option>
-        <option value="cam-only">Cam Only</option>
+        <option value="screen-cam">Analyse and Suggest</option>
+        <option value="screen-only">Analyse only</option>
+        <option value="cam-only">Suggest only</option>
       </select>
       {recordingIcon && <img src={recordingIcon} alt="Recording option icon" className="ml-2" />}
     </div>

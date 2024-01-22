@@ -99,7 +99,10 @@ const Popup = () => {
     };
     const startRecording = () => {
         console.log('Recording option selected:', recordingSelection);
-        // Logic to start recording...
+        // Send a message to the active tab to fetch HTML content
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML" });
+        });
     };
     // Function to handle review form submission
     const submitReview = (event) => {
@@ -120,12 +123,17 @@ const Popup = () => {
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: disabilitySelection, onChange: handleDisabilitySelectionChange, className: "border border-gray-300 rounded p-2" },
                 react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "" }, "Select disability type"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Blindness" }, "Blindness"))),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Blindness" }, "Blindness"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Deafness" }, "Deafness"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Non-Verbal" }, "Non-Verbal"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Low-Vision" }, "Low-vision"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Hard of Hearing" }, "Hard of Hearing"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Paraplegic" }, "Paraplegia"))),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4 flex items-center" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: recordingSelection, onChange: handleRecordingSelectionChange, className: "border border-gray-300 rounded p-2" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-cam" }, "Screen and Camera"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-only" }, "Screen Only"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Cam Only")),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-cam" }, "Analyse and Suggest"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-only" }, "Analyse only"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Suggest only")),
             recordingIcon && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: recordingIcon, alt: "Recording option icon", className: "ml-2" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Start recording"),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("head", null,
