@@ -27,8 +27,8 @@ __webpack_require__.r(__webpack_exports__);
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     // States for disability and recording options
-    const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
-    const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('screen-cam');
+    const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('screen-cam');
+    const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('cam-only');
     const [recordingIcon, setRecordingIcon] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
     // States for the review form
     const [name, setName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -51,20 +51,14 @@ const Popup = () => {
         });
         chrome.runtime.onMessage.addListener((message) => {
             if (message.html) {
-                const htmlContent = message.html;
-                document.getElementById('htmlContent').textContent = htmlContent;
                 fetch('http://localhost:5000/receive_html', {
                     method: 'POST',
-                    body: htmlContent,
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    }
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ htmlContent: message.html, disabilityType: message.disabilityType })
                 })
                     .then(response => response.text())
                     .then(data => {
                     console.log('Server Response:', data);
-                    // Update the popup with the server response
-                    document.getElementById('serverResponse').textContent = data;
                 })
                     .catch(error => console.error('Error:', error));
             }
@@ -99,9 +93,10 @@ const Popup = () => {
     };
     const startRecording = () => {
         console.log('Recording option selected:', recordingSelection);
-        // Send a message to the active tab to fetch HTML content
+        console.log('Disability Type:', disabilitySelection);
+        // Send a message to the active tab to fetch HTML content along with the disability type
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML" });
+            chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML", disabilityType: disabilitySelection });
         });
     };
     // Function to handle review form submission

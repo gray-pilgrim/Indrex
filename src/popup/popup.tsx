@@ -10,8 +10,8 @@ import camOnlyIcon from '../assets/Banner.png';
 const Popup = () => {
   const [currentUrl, setCurrentUrl] = useState('');
   // States for disability and recording options
-  const [disabilitySelection, setDisabilitySelection] = useState('');
-  const [recordingSelection, setRecordingSelection] = useState('screen-cam');
+  const [disabilitySelection, setDisabilitySelection] = useState({'screen-cam'});
+  const [recordingSelection, setRecordingSelection] = useState('cam-only');
   const [recordingIcon, setRecordingIcon] = useState(screenCamIcon);
 
   // States for the review form
@@ -40,25 +40,19 @@ const Popup = () => {
     
     chrome.runtime.onMessage.addListener((message) => {
       if (message.html) {
-        const htmlContent = message.html;
-        document.getElementById('htmlContent').textContent = htmlContent;
-    
         fetch('http://localhost:5000/receive_html', {
           method: 'POST',
-          body: htmlContent,
-          headers: {
-            'Content-Type': 'text/plain'
-          }
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ htmlContent: message.html, disabilityType: message.disabilityType })
         })
         .then(response => response.text())
         .then(data => {
           console.log('Server Response:', data);
-          // Update the popup with the server response
-          document.getElementById('serverResponse').textContent = data;
         })
         .catch(error => console.error('Error:', error));
       }
     });
+    
     
     
     // Trigger the content script to send HTML when the popup is opened
@@ -95,13 +89,14 @@ const Popup = () => {
 
   const startRecording = () => {
     console.log('Recording option selected:', recordingSelection);
+    console.log('Disability Type:', disabilitySelection);
   
-    // Send a message to the active tab to fetch HTML content
+    // Send a message to the active tab to fetch HTML content along with the disability type
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML" });
+      chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML", disabilityType: disabilitySelection });
     });
   };
-
+  
   // Function to handle review form submission
   const submitReview = (event) => {
     event.preventDefault();
