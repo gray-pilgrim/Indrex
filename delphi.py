@@ -1,14 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from bs4 import BeautifulSoup
+from gtts import gTTS
+import os
 import json
 
 app = Flask(__name__)
 CORS(app)
 
+def text_to_speech(text, lang='en'):
+    tts = gTTS(text=text, lang=lang, slow=False)
+    tts.save("output.mp3")
+    os.system("start output.mp3")
+
 @app.route('/receive_html', methods=['POST'])
 def receive_html():
-
+	
 	data = request.get_json()  # Use get_json() for parsing JSON data
 	if not data:
 		return jsonify({'error': 'No data received'}), 400
@@ -41,7 +48,7 @@ def receive_html():
 	if(specs != None):
 		prompt += "Specifications are "+specs+". \n"
 	print(prompt)	
-
+	text_to_speech(prompt)
 	return 'OK'
 
 

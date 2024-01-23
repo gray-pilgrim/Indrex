@@ -10,7 +10,7 @@ import camOnlyIcon from '../assets/Banner.png';
 const Popup = () => {
   const [currentUrl, setCurrentUrl] = useState('');
   // States for disability and recording options
-  const [disabilitySelection, setDisabilitySelection] = useState({'screen-cam'});
+  const [disabilitySelection, setDisabilitySelection] = useState('');
   const [recordingSelection, setRecordingSelection] = useState('cam-only');
   const [recordingIcon, setRecordingIcon] = useState(screenCamIcon);
 
@@ -120,21 +120,14 @@ const Popup = () => {
     
     {/* Disability and recording options from code1.tsx */}
     <div className="mb-4">
-      <select
-        value={disabilitySelection}
-        onChange={handleDisabilitySelectionChange}
-        className="border border-gray-300 rounded p-2"
-      >
-        <option value="">Select disability type</option>
-        <option value="Blindness">Blindness</option>
-        <option value="Deafness">Deafness</option>
-        <option value="Non-Verbal">Non-Verbal</option>
-        <option value="Low-Vision">Low-vision</option>
-        <option value="Hard of Hearing">Hard of Hearing</option>
-        <option value="Paraplegic">Paraplegia</option>
-        {/* ... other disability options ... */}
-      </select>
-    </div>
+  <input
+    type="text"
+    value={disabilitySelection}
+    onChange={(e) => setDisabilitySelection(e.target.value)}
+    className="border border-gray-300 rounded p-2"
+    placeholder="Enter disability type"
+  />
+</div>
     <div className="mb-4 flex items-center">
       <select
         value={recordingSelection}

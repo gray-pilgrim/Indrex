@@ -27,7 +27,7 @@ __webpack_require__.r(__webpack_exports__);
 const Popup = () => {
     const [currentUrl, setCurrentUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     // States for disability and recording options
-    const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('screen-cam');
+    const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('cam-only');
     const [recordingIcon, setRecordingIcon] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
     // States for the review form
@@ -116,14 +116,7 @@ const Popup = () => {
     return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "p-4" },
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500 mb-4" }, "The Great Extension"),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: disabilitySelection, onChange: handleDisabilitySelectionChange, className: "border border-gray-300 rounded p-2" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "" }, "Select disability type"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Blindness" }, "Blindness"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Deafness" }, "Deafness"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Non-Verbal" }, "Non-Verbal"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Low-Vision" }, "Low-vision"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Hard of Hearing" }, "Hard of Hearing"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Paraplegic" }, "Paraplegia"))),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: disabilitySelection, onChange: (e) => setDisabilitySelection(e.target.value), className: "border border-gray-300 rounded p-2", placeholder: "Enter disability type" })),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4 flex items-center" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: recordingSelection, onChange: handleRecordingSelectionChange, className: "border border-gray-300 rounded p-2" },
                 react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-cam" }, "Analyse and Suggest"),
