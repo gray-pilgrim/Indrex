@@ -15,8 +15,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
-/* harmony import */ var _assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/Banner.png */ "./src/assets/Banner.png");
+/* harmony import */ var react_helmet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-helmet */ "./node_modules/react-helmet/es/Helmet.js");
+/* harmony import */ var _assets_tailwind_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/tailwind.css */ "./src/assets/tailwind.css");
+/* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase/firestore */ "./node_modules/firebase/firestore/dist/esm/index.esm.js");
+/* harmony import */ var _assets_Banner_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../assets/Banner.png */ "./src/assets/Banner.png");
+/* harmony import */ var _firebase__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./firebase */ "./src/popup/firebase.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
 
 
 
@@ -24,12 +38,38 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+const db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_4__.getFirestore)(_firebase__WEBPACK_IMPORTED_MODULE_6__["default"]);
+const saveIntoDb = (name, type, reviews) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const docRef = yield (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_4__.addDoc)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_4__.collection)(db, "main-db"), {
+            name: name,
+            type: type,
+            reviews: reviews,
+        });
+        console.log("Document written with ID: ", docRef.id);
+    }
+    catch (e) {
+        console.error("Error adding document: ", e);
+    }
+});
+const getDataFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const querySnapshot = yield (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_4__.getDocs)((0,firebase_firestore__WEBPACK_IMPORTED_MODULE_4__.collection)(db, "main-db"));
+    querySnapshot.forEach((doc) => {
+        alert(`${doc.id} => ${JSON.stringify(doc.data())}`);
+    });
+});
 const Popup = () => {
+    const [inclusivityRating, setInclusivityRating] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0);
+    const [isRequestInProgress, setIsRequestInProgress] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+    const [inclusivityAnalysis, setInclusivityAnalysis] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+    const [augmentingProducts, setAugmentingProducts] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
     const [currentUrl, setCurrentUrl] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     // States for disability and recording options
+    const [prelimSelection, setpreliminarySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''); // This is the preliminary selection [Blindness, Deafness, Non-Verbal, Low-Vision, Hard of Hearing, Paraplegic
     const [disabilitySelection, setDisabilitySelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [recordingSelection, setRecordingSelection] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('cam-only');
-    const [recordingIcon, setRecordingIcon] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+    const [recordingIcon, setRecordingIcon] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_5__);
     // States for the review form
     const [name, setName] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
     const [review, setReview] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -54,13 +94,19 @@ const Popup = () => {
                 fetch('http://localhost:5000/receive_html', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ htmlContent: message.html, disabilityType: message.disabilityType })
+                    body: JSON.stringify({ htmlContent: message.html, disabilityType: message.disabilityType, preliminaryType: message.preliminaryType })
                 })
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(data => {
-                    console.log('Server Response:', data);
+                    setInclusivityAnalysis(data.inclusivity_analysis);
+                    setAugmentingProducts(data.augmenting_products || []);
+                    setInclusivityRating(data.inclusivity_rating); // Update inclusivity rating
+                    setIsRequestInProgress(false);
                 })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => {
+                    console.error('Error:', error);
+                    setIsRequestInProgress(false);
+                });
             }
         });
         // Trigger the content script to send HTML when the popup is opened
@@ -75,28 +121,36 @@ const Popup = () => {
     const handleDisabilitySelectionChange = (event) => {
         setDisabilitySelection(event.target.value);
     };
+    const handlepreliminarySelectionChange = (event) => {
+        setpreliminarySelection(event.target.value);
+    };
     const handleRecordingSelectionChange = (event) => {
         setRecordingSelection(event.target.value);
         switch (event.target.value) {
             case 'screen-cam':
-                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_5__);
                 break;
             case 'screen-only':
-                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_5__);
                 break;
             case 'cam-only':
-                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_3__);
+                setRecordingIcon(_assets_Banner_png__WEBPACK_IMPORTED_MODULE_5__);
                 break;
             default:
                 setRecordingIcon(null); // or a default icon
         }
     };
     const startRecording = () => {
+        // Prevent multiple requests if one is already in progress
+        if (isRequestInProgress) {
+            return;
+        }
+        setIsRequestInProgress(true); // Set to true when request starts
         console.log('Recording option selected:', recordingSelection);
         console.log('Disability Type:', disabilitySelection);
         // Send a message to the active tab to fetch HTML content along with the disability type
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML", disabilityType: disabilitySelection });
+            chrome.tabs.sendMessage(tabs[0].id, { action: "fetchHTML", disabilityType: disabilitySelection, preliminaryType: prelimSelection });
         });
     };
     // Function to handle review form submission
@@ -104,6 +158,7 @@ const Popup = () => {
         event.preventDefault();
         const newReview = { name, review };
         const updatedReviews = [...reviews, newReview];
+        saveIntoDb(name, prelimSelection, review);
         // Save the updated reviews array to chrome.storage
         chrome.storage.sync.set({ reviews: updatedReviews }).then(() => {
             console.log('Review submitted:', newReview);
@@ -114,31 +169,46 @@ const Popup = () => {
         setReview('');
     };
     return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "p-4" },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500 mb-4" }, "The Great Extension"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", { className: "text-5xl text-green-500 mb-4" }, "INDREX"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_helmet__WEBPACK_IMPORTED_MODULE_2__.Helmet, null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("meta", { charSet: "UTF-8" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("link", { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" }),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("title", null, "Disability Analysis Tool")),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: prelimSelection, onChange: (e) => setpreliminarySelection(e.target.value), className: "border border-gray-300 rounded p-2", name: "disabilityType", id: "disabilityType" },
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "" }, "Select disability type"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Blindness" }, "Blindness"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Deafness" }, "Deafness"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Nonverbal" }, "Non-Verbal"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "Lowvision" }, "Low-vision"),
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "HardofHearing" }, "Hard of Hearing"))),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: disabilitySelection, onChange: (e) => setDisabilitySelection(e.target.value), className: "border border-gray-300 rounded p-2", placeholder: "Enter disability type" })),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "mb-4 flex items-center" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("select", { value: recordingSelection, onChange: handleRecordingSelectionChange, className: "border border-gray-300 rounded p-2" },
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-cam" }, "Analyse and Suggest"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "screen-only" }, "Analyse only"),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", { value: "cam-only" }, "Suggest only")),
-            recordingIcon && react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", { src: recordingIcon, alt: "Recording option icon", className: "ml-2" })),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Start recording"),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("head", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("title", null, "Extracted HTML")),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("body", null,
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Extracted HTML:"),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { id: "htmlContent" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Server Response:"),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { id: "serverResponse" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("script", { src: "popup.js" })),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", id: "output", name: "Additional Details", value: disabilitySelection, onChange: (e) => setDisabilitySelection(e.target.value), className: "border border-gray-300 rounded p-2", placeholder: "Enter Additional Details", "aria-label": "Additional Details", required: true })),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { onClick: startRecording, className: "bg-red-500 text-white px-4 py-2 rounded" }, "Analyze"),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null,
+                "Inclusivity Rating: ",
+                inclusivityRating),
+            " "),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { id: "output", name: "output", placeholder: "output", "aria-label": "output", value: inclusivityAnalysis, readOnly: true, className: "border border-gray-300 rounded p-2 w-full", style: { minHeight: '50px', resize: 'none' } })),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null,
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Augmenting Products"),
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, augmentingProducts.map((product, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", { key: index }, product))))),
+        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", { "aria-label": "Subscribe example" },
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "container" },
+                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("article", null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("hgroup", null,
+                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Feedback"),
+                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Share Your Experience")),
+                    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", { onSubmit: submitReview, className: "mb-4" },
+                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), id: "firstname", name: "firstname", placeholder: "Name", "aria-label": "Name", required: true }),
+                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: review, onChange: (e) => setReview(e.target.value), id: "opinion", name: "opinion", placeholder: "Opinion", "aria-label": "Opinion", required: true }),
+                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { type: "submit", color: 'blue' }, "Submit"))))),
         react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "review-section h-40 overflow-auto border border-gray-300 p-2 my-4" }, reviews.map((review, index) => (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { key: index, className: "review mb-2" },
             react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h5", { className: "font-bold" }, review.name),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, review.review))))),
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", { onSubmit: submitReview, className: "mb-4" },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", value: name, onChange: (e) => setName(e.target.value), placeholder: "Your name", className: "border border-gray-300 rounded p-2 w-full mb-2" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", { value: review, onChange: (e) => setReview(e.target.value), placeholder: "Your review", className: "border border-gray-300 rounded p-2 w-full mb-2" }),
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", { type: "submit", className: "bg-blue-500 text-white px-4 py-2 rounded" }, "Submit Review"))));
+            react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, review.review)))))));
 };
 const container = document.createElement('div');
 document.body.appendChild(container);
@@ -146,6 +216,44 @@ const root = (0,react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot)(contai
 root.render(react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Popup, null));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Popup);
 
+
+/***/ }),
+
+/***/ "./src/popup/firebase.ts":
+/*!*******************************!*\
+  !*** ./src/popup/firebase.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ "./node_modules/firebase/app/dist/esm/index.esm.js");
+/* harmony import */ var firebase_analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/analytics */ "./node_modules/firebase/analytics/dist/esm/index.esm.js");
+// Import the functions you need from the SDKs you need
+
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDnv5qpLN3peM_ZefHVECF72pT4SejgZOw",
+  authDomain: "indrex-22c70.firebaseapp.com",
+  projectId: "indrex-22c70",
+  storageBucket: "indrex-22c70.appspot.com",
+  messagingSenderId: "218932251969",
+  appId: "1:218932251969:web:16f3dcfc87b42b2ce125c0",
+  measurementId: "G-HSR02WVZ0B"
+};
+
+// Initialize Firebase
+const firebase = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(firebaseConfig);
+// const analytics = getAnalytics(app);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (firebase);
 
 /***/ }),
 
@@ -371,7 +479,7 @@ module.exports = __webpack_require__.p + "images/f30cd11ff548b19631ba.png";
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js","src_assets_tailwind_css"], () => (__webpack_require__("./src/popup/popup.tsx")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["vendors-node_modules_react-dom_client_js","vendors-node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_sour-a92e04","src_assets_tailwind_css"], () => (__webpack_require__("./src/popup/popup.tsx")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
